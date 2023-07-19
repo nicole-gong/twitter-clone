@@ -3,7 +3,7 @@
     --mediumPink: #d27e92;
     --lightPink: #e7aabc;
     --lighterPink: #eed4da;
-    --border: #474747;
+    --border: #714058;
     --text: #171717;
     --spacing: 15px
 }
@@ -16,7 +16,7 @@ a {
 a:hover {
     color: var(--darkPink);
     background-color: var(--mediumPink);
-    border-radius: 75%;
+    border-radius: 30%;
 }
 
 h1 {
@@ -54,7 +54,7 @@ nav a.pink {
 }
 
 .mainSectionContainer {
-    background-color: var(--lighterPink);
+    background-color: var(--mediumPink);
     padding: 0px;
     margin-left: calc(100% * (1/6) + 8px);
     border-left: 1px solid var(--border);
@@ -78,6 +78,54 @@ nav a.pink {
 }
 
 .postFormContainer {
-    display: flex
+    background-color: var(--lightPink);
+    display: flex;
+    padding: var(--spacing);
+    border-bottom: 10px solid var(--border);
+    flex-shrink: 0;
+}
 
+.userImageContainer {
+    width: 50px;
+    height: 50px;
+}
+
+.userImageContainer img {
+    width: 100%;
+    height: 100%;
+    border-radius: 30%;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.textAreaContainer {
+    flex: 1;
+    padding-left: var(--spacing)
+}
+
+.textAreaContainer textArea {
+    background-color: var(--lightPink);
+    width: 100%;
+    border: none;
+    border-radius: 5%;
+    resize: none;
+    font-size: 18px;
+    outline: var(--darkPink)
+}
+
+#submitPostButton {
+    background-color: var(--darkPink);
+    color: white;
+    border: none;
+    border-radius: 30%;
+    padding: 7px 15px;
+    font-weight: 600;
+}
+
+#submitPostButton:disabled {
+    background-color: var(--mediumPink);
+    color: #eae8e8;
+    border: none;
+    border-radius: 30%;
+    padding: 7px 15px;
+    font-weight: 600;
 }
