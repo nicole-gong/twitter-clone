@@ -76,3 +76,8 @@ nav a.pink {
 .titleContainer h1 {
     flex: 1
 }
+
+.postFormContainer {
+    display: flex
+
+}
