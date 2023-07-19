@@ -1,0 +1,67 @@
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const User = require('../schemas/UserSchema')
+const bcrypt = require('bcrypt')
+const router = express.Router()
+
+app.set("view engine", "pug")
+app.set("views", "views")
+app.use(bodyParser.urlencoded({ extended: false }))
+
+router.get("/", (req, res, next) => {
+    var payload = {
+        pageTitle: "User Registration"
+    }
+    
+    res.status(200).render("register", payload)
+})
+
+router.post("/", async (req, res, next) => {
+    var firstName = req.body.firstName.trim()
+    var lastName = req.body.lastName.trim()
+    var username = req.body.username.trim()
+    var email = req.body.email.trim()
+    var password = req.body.password
+
+    var payload = req.body
+    payload.pageTitle = "User Registration"
+    
+    if (firstName && lastName && username && email && password) {
+        // find if user already exists
+        var user = await User.findOne({
+            $or: [{ username: username }, { email: email }]
+        })
+        .catch((err) => {
+            console.log(err)
+            payload.errorMessage = "Something went wrong with your registration. Please try again."
+            res.status(200).render("register", payload)
+        })
+        
+        if (user == null) {
+            // if user doesn't exist, create a new user. hash the password too
+            var data = req.body
+            data.password = await bcrypt.hash(password, 10)
+            User.create(data)
+            .then((user) => {
+                req.session.user = user;
+                return res.redirect("/")
+            })
+        }
+        else {
+            // user found
+            if (email == user.email)
+                payload.errorMessage = "Email already in use."
+            else
+                payload.errorMessage = "Username already in use."
+            res.status(200).render("register", payload)
+        }
+    }
+    else {
+        // some fields are blank
+        payload.errorMessage = "Please make sure each field has a valid value."
+        res.status(200).render("register", payload)
+    }
+})
+
+module.exports = router

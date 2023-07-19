@@ -1,0 +1,48 @@
+:root {
+    --darkPink: #632435;
+    --mediumPink: #d27e92;
+    --lightPink: #e7aabc;
+}
+
+body {
+    background-color: var(--lightPink)
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.loginContainer {
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    border: 1px solid #dedede;
+    background-color: white;
+    text-align: center;
+    box-shadow: 0 8px 5px rgba(0, 0, 0, 0.5);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border-radius: 2px;
+    border: 1px solid #dedede;
+    background-color: #f2f2f2;
+}
+
+input[type="submit"] {
+    background-color: var(--mediumPink);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
