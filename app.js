@@ -28,6 +28,10 @@ app.use("/login", loginRoute)
 app.use("/register", registerRoute)
 app.use("/logout", logoutRoute)
 
+// api routes
+const postApiRoute = require('./routes/api/postRoutes.js')
+app.use("/api/posts", postApiRoute)
+
 app.get("/", middleware.requireLogin, (req, res, next) => {
     var payload = {
         pageTitle: "Critter",
