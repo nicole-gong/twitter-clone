@@ -20,14 +20,13 @@ $('#submitPostButton').click(event => {
 })
 
 $(document).on("click", ".likeButton", event => {
-    button = $(event.target)
+    var button = $(event.target)
     var postID = getPostIDfromElement(button)
     $.ajax({
         url: `/api/posts/${postID}/like`,
-        type: "PUT",
+        method: "PUT",
         success: postData => {
             button.find("span").text(postData.likes.length || "")
-            console.log(likeButton)
             if (postData.likes.includes(userLoggedIn._id))
                 button.addClass("active")
             else
@@ -36,18 +35,17 @@ $(document).on("click", ".likeButton", event => {
     })
 })
 $(document).on("click", ".repostButton", event => {
-    button = $(event.target)
+    var button = $(event.target)
     var postID = getPostIDfromElement(button)
     $.ajax({
         url: `/api/posts/${postID}/repost`,
-        type: "POST",
+        method: "POST",
         success: postData => {
-            likeButton.find("span").text(postData.likes.length || "")
-            console.log(likeButton)
-            if (postData.likes.includes(userLoggedIn._id))
-                likeButton.addClass("active")
+            button.find("span").text(postData.repostUsers.length || "")
+            if (postData.repostUsers.includes(userLoggedIn._id))
+                button.addClass("active")
             else
-                likeButton.removeClass("active")
+                button.removeClass("active")
         }
     })
 })
@@ -59,22 +57,36 @@ function getPostIDfromElement(element) {
 }
 
 function createPostHTML(postData) {
-    var postedBy = postData.postedBy
-    var displayName = postedBy.firstName + " " + postedBy.lastName
     var timestamp = timeDifference(new Date(), new Date(postData.createdAt))
 
+    // if the post is repost, then change post data's to OP's content
+    var isRepost = postData.repostData !== undefined
+    var repostedBy = isRepost ? postData.postedBy.username : null
+    postData = isRepost ? postData.repostData : postData 
+
     var likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? "active" : ""
+    var repostButtonActiveClass = postData.repostUsers.includes(userLoggedIn._id) ? "active" : ""
+    var repostText = ""
+    if (isRepost)
+        repostText = 
+            `<span>
+                <i class='fa-solid fa-shrimp'></i>
+                Recreeted by <a href='/profile/${repostedBy}'>${userLoggedIn.firstName} ${userLoggedIn.lastName}</a>
+            </span>`
 
     return `<div class='post' data-id='${postData._id}'>
                 <div class='mainContentContainer'>
+                    <div class='postActionContainer'>
+                        ${repostText}
+                    </div>
                     <div class='userAndPostContainer'>    
                         <div class='userImageContainer'>
-                                <img src='${postedBy.profilePic}'></img>
+                                <img src='${postData.postedBy.profilePic}'></img>
                         </div>
                         <div class='postContentContainer'>
                             <div class='postHeader'>
-                                <a href='/profile/${postedBy.username}' class='displayName'>${displayName}</a>
-                                <span class='username'>@${postedBy.username}</span>
+                                <a href='/profile/${postData.postedBy.username}' class='displayName'>${postData.postedBy.firstName} ${postData.postedBy.lastName}</a>
+                                <span class='username'>@${postData.postedBy.username}</span>
                                 <span class='username'>${timestamp}</span>
                             </div>
                             <div class='postBody'>
@@ -89,8 +101,9 @@ function createPostHTML(postData) {
                             </button>
                         </div>
                         <div class='postButtonContainer green'>
-                            <button class='repostButton'>
-                                <i class='fa-solid fa-repost'></i>
+                            <button class='repostButton ${repostButtonActiveClass}'>
+                                <i class='fa-solid fa-shrimp'></i>
+                                <span>${postData.repostUsers.length || ""}</span>
                             </button>
                         </div>
                         <div class='postButtonContainer red'>

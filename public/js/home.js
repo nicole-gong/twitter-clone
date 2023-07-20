@@ -4,11 +4,8 @@ $(document).ready(() => {
 
 function outputPosts(results, container) {
     container.html('')
-    console.log(results)
     results.forEach(result => {
-        console.log(result)
         var html = createPostHTML(result)
-        console.log(html)
         container.append(html)
     })
 

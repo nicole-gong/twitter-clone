@@ -11,19 +11,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 router.get("/", (req, res, next) => {
     // band-aid code for fixing "undefined" users
     Post.find()
-        .populate({
-            path: 'postedBy',
-            populate: {
-                path: 'firstName',
-                path: 'lastName',
-                path: 'username',
-                path: 'email',
-                path: 'password',
-                path: 'profilePic'
-            }
-        })
+        .populate("postedBy")
+        .populate("repostData")
         .sort({ "createdAt": -1})
-        .then(foundPost => {
+        .then(async foundPost => {
+            foundPost = await User.populate(foundPost, { path: "repostData.postedBy"})
             res.status(200).send(foundPost)
         })
         .catch(err => {
@@ -73,16 +65,33 @@ router.put("/:id/like", async (req, res, next) => {
     
     res.status(200).send(post)
 })
-router.put("/:id/repost", async (req, res, next) => {
+
+router.post("/:id/repost", async (req, res, next) => {
     var postID = req.params.id
     var userID = req.session.user._id
-
-    var deletedPost = await Post.findOneAndDelete({ postedBy: userID, repostData: postID})
-    var ternary = deletedPost ? "$pull" : "$addToSet"
+    var deletedPost = await Post.findOneAndDelete({ postedBy: userID, repostData: postID })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(400);
+        })
+    var ternary = deletedPost != null ? "$pull" : "$addToSet"
     var repost = deletedPost
     if (repost == null) 
         repost = await Post.create({ postedBy: userID, repostData: postID })
-    
+            .catch(err => {
+                console.log(err)
+                res.sendStatus(400)
+            })
+    req.session.user = await User.findByIdAndUpdate(userID, { [ternary]: { reposts: repost._id } }, { new: true })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        })
+    var post = await Post.findByIdAndUpdate(postID, { [ternary]: { repostUsers: userID } }, { new: true })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        })
     
     res.status(200).send(post)
 })
