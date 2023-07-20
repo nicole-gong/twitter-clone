@@ -20,12 +20,40 @@ $('#submitPostButton').click(event => {
 })
 
 $(document).on("click", ".likeButton", event => {
-    var postID = getPostIDfromElement($(event.target))
-    console.log(postID)
+    button = $(event.target)
+    var postID = getPostIDfromElement(button)
+    $.ajax({
+        url: `/api/posts/${postID}/like`,
+        type: "PUT",
+        success: postData => {
+            button.find("span").text(postData.likes.length || "")
+            console.log(likeButton)
+            if (postData.likes.includes(userLoggedIn._id))
+                button.addClass("active")
+            else
+                button.removeClass("active")
+        }
+    })
+})
+$(document).on("click", ".repostButton", event => {
+    button = $(event.target)
+    var postID = getPostIDfromElement(button)
+    $.ajax({
+        url: `/api/posts/${postID}/repost`,
+        type: "POST",
+        success: postData => {
+            likeButton.find("span").text(postData.likes.length || "")
+            console.log(likeButton)
+            if (postData.likes.includes(userLoggedIn._id))
+                likeButton.addClass("active")
+            else
+                likeButton.removeClass("active")
+        }
+    })
 })
 
 function getPostIDfromElement(element) {
-    var rootElement = element.hasClass("post") ? element : element.closest(".post")
+    var rootElement = element.hasClass("post") == true ? element : element.closest(".post")
     var postID = rootElement.data().id
     return postID
 }
@@ -34,6 +62,9 @@ function createPostHTML(postData) {
     var postedBy = postData.postedBy
     var displayName = postedBy.firstName + " " + postedBy.lastName
     var timestamp = timeDifference(new Date(), new Date(postData.createdAt))
+
+    var likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? "active" : ""
+
     return `<div class='post' data-id='${postData._id}'>
                 <div class='mainContentContainer'>
                     <div class='userAndPostContainer'>    
@@ -56,11 +87,16 @@ function createPostHTML(postData) {
                             <button class='commentButton'>
                                 <i class='fa-solid fa-comment'></i>
                             </button>
-                            <button class='retweetButton'>
-                                <i class='fa-solid fa-retweet'></i>
+                        </div>
+                        <div class='postButtonContainer green'>
+                            <button class='repostButton'>
+                                <i class='fa-solid fa-repost'></i>
                             </button>
-                            <button class='likeButton'>
-                                <i class='fa-regular fa-heart'></i>
+                        </div>
+                        <div class='postButtonContainer red'>
+                            <button class='likeButton ${likeButtonActiveClass}'>
+                                <i class='fa-solid fa-heart'></i>
+                                <span>${postData.likes.length || ""}</span>
                             </button>
                         </div>
                     </div>

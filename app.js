@@ -29,13 +29,14 @@ app.use("/register", registerRoute)
 app.use("/logout", logoutRoute)
 
 // api routes
-const postApiRoute = require('./routes/api/postRoutes.js')
+const postApiRoute = require('./routes/api/posts.js')
 app.use("/api/posts", postApiRoute)
 
 app.get("/", middleware.requireLogin, (req, res, next) => {
     var payload = {
         pageTitle: "Critter",
-        userLoggedIn: req.session.user
+        userLoggedIn: req.session.user,
+        userLoggedInJS: JSON.stringify(req.session.user)
     }
 
     res.status(200).render("home", payload)

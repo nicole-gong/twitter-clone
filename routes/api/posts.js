@@ -52,4 +52,39 @@ router.post("/", (req, res, next) => {
         })
 })
 
+router.put("/:id/like", async (req, res, next) => {
+    var postID = req.params.id
+    var userID = req.session.user._id
+
+    var isLiked = req.session.user.likes && req.session.user.likes.includes(postID)
+    
+    // Likes and unlikes post using ternary operator, removing and adding like to likes array
+    var ternary = isLiked ? "$pull" : "$addToSet" 
+    req.session.user = await User.findByIdAndUpdate(userID, { [ternary]: { likes: postID } }, { new: true })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        })
+    var post = await Post.findByIdAndUpdate(postID, { [ternary]: { likes: userID } }, { new: true })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        })
+    
+    res.status(200).send(post)
+})
+router.put("/:id/repost", async (req, res, next) => {
+    var postID = req.params.id
+    var userID = req.session.user._id
+
+    var deletedPost = await Post.findOneAndDelete({ postedBy: userID, repostData: postID})
+    var ternary = deletedPost ? "$pull" : "$addToSet"
+    var repost = deletedPost
+    if (repost == null) 
+        repost = await Post.create({ postedBy: userID, repostData: postID })
+    
+    
+    res.status(200).send(post)
+})
+    
 module.exports = router

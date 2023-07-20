@@ -199,9 +199,21 @@ nav a.pink {
     height: 30px;
     width: 30px;
 }
+.postFooter .postButtonContainer button.likeButton {
+    color: var(--lightPink);
+}
+
+.postFooter .postButtonContainer i, .postFooter .postButtonContainer span {
+    pointer-events: none;
+}
 
 .postFooter .postButtonContainer button:hover {
-    background-color: var(--lightPink);
+    background-color: var(--lighterPink);
     color: var(--mediumPink);
     border-radius: 50%;
+}
+
+.postButtonContainer.red button.likeButton.active {
+    color: var(--darkPink);
+    background-image: url("fas.fa-shrimp")
 }

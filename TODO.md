@@ -1,0 +1,2 @@
+- [ ] display a "solid" heart when a post is liked, and an "outline" heart otherwise.
+- [ ] more shrimp 
