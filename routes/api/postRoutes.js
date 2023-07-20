@@ -9,7 +9,27 @@ const router = express.Router()
 app.use(bodyParser.urlencoded({ extended: false }))
 
 router.get("/", (req, res, next) => {
-    
+    // band-aid code for fixing "undefined" users
+    Post.find()
+        .populate({
+            path: 'postedBy',
+            populate: {
+                path: 'firstName',
+                path: 'lastName',
+                path: 'username',
+                path: 'email',
+                path: 'password',
+                path: 'profilePic'
+            }
+        })
+        .sort({ "createdAt": -1})
+        .then(foundPost => {
+            res.status(200).send(foundPost)
+        })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        })
 })
 
 router.post("/", (req, res, next) => {
@@ -22,6 +42,7 @@ router.post("/", (req, res, next) => {
     }
     Post.create(postData)
         .then(async newPost => {
+            // this may not be necessary, but i'm too scared to work with populate some more
             newPost = await User.populate(newPost, { path: "postedBy"})
             res.status(201).send(newPost)
         })

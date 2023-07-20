@@ -62,7 +62,7 @@ nav i {
 .iconText {
     position: relative;
     font-family: sans-serif;
-    font-weight: 600;
+    font-weight: bold;
     font-size: 18px;
     align-items: flex-start;
     padding: 10px;
@@ -137,7 +137,7 @@ nav a.pink {
     border: none;
     border-radius: 30%;
     padding: 7px 15px;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 #submitPostButton:disabled {
@@ -146,7 +146,7 @@ nav a.pink {
     border: none;
     border-radius: 30%;
     padding: 7px 15px;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 .post {
@@ -160,5 +160,48 @@ nav a.pink {
 
 .mainContentContainer {
     display: flex;
+    flex-direction: column;
     flex: 1;
+}
+
+.userAndPostContainer {
+    display: flex;
+}
+
+.postContentContainer {
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--spacing);
+    flex: 1
+}
+
+.displayName { font-weight: bold }
+.username { color: var(--border) }
+
+.postFooter {
+    display: flex;
+}
+
+.postFooter .postButtonContainer {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    margin-top: 5px;
+}
+
+.postFooter .postButtonContainer button {
+    color: var(--darkPink);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    height: 30px;
+    width: 30px;
+}
+
+.postFooter .postButtonContainer button:hover {
+    background-color: var(--lightPink);
+    color: var(--mediumPink);
+    border-radius: 50%;
 }
