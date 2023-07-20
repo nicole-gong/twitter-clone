@@ -12,26 +12,47 @@ html(lang="en")
     body
         .wrapper
             .row 
-                nav.col-2
-                    a.pink(href="/")
-                        i.fas.fa-shrimp
-                    a(href="/")
-                        i.fas.fa-house
-                    a(href="/search")
-                        i.fas.fa-magnifying-glass
-                    a(href="/notifications")
-                        i.fas.fa-bell
-                    a(href="/messages")
-                        i.fas.fa-envelope
-                    a(href="/profile")
-                        i.fas.fa-user
-                    a(href="/logout")
+                nav.d-md-block.col-2
+                    a.pink(href="/") 
+                        i.topIcon.fas.fa-shrimp 
+                    a.child(href="/")
+                        i.fas.fa-house 
+                        .iconText Home
+                    a.child(href="/search")
+                        i.fas.fa-magnifying-glass 
+                        .iconText Search
+                    a.child(href="/notifications")
+                        i.fas.fa-bell 
+                        .iconText Notifications
+                    a.child(href="/messages")
+                        i.fas.fa-envelope 
+                        .iconText Messages
+                    a.child(href="/profile")
+                        i.fas.fa-user 
+                        .iconText Profile
+                    a.child(href="/logout")
+                        i.fas.fa-right-from-bracket
+                        .iconText Logout
+
+                nav.d-sm-none.col-2
+                    a.child.pink(href="/") 
+                        i.fas.fa-shrimp 
+                    a.child(href="/")
+                        i.fas.fa-house 
+                    a.child(href="/search")
+                        i.fas.fa-magnifying-glass 
+                    a.child(href="/notifications")
+                        i.fas.fa-bell 
+                    a.child(href="/messages")
+                        i.fas.fa-envelope 
+                    a.child(href="/profile")
+                        i.fas.fa-user 
+                    a.child(href="/logout")
                         i.fas.fa-right-from-bracket
                 .mainSectionContainer.col-10.col-md-9.col-lg-8
                     .titleContainer
                         h1 #{pageTitle}
                     block content 
-
                 .d-none.d-md-block.col-1.col-lg-2
                     span hiii
 

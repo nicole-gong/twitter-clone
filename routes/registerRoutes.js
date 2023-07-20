@@ -60,7 +60,7 @@ router.post("/", async (req, res, next) => {
     else {
         // some fields are blank
         payload.errorMessage = "Please make sure each field has a valid value."
-        res.status(200).render("register", payload)
+        res.status(201).render("register", payload)
     }
 })
 

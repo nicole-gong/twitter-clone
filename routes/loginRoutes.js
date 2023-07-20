@@ -24,11 +24,11 @@ router.post("/", async (req, res, next) => {
         var user = await User.findOne({
             $or: [{ username: logUsername }, { email: logUsername }]
         })
-        .catch((err) => {
-            console.log(err)
-            payload.errorMessage = "Something went wrong with your registration. Please try again."
-            res.status(200).render("login", payload)
-        })
+            .catch((err) => {
+                console.log(err)
+                payload.errorMessage = "Something went wrong with your registration. Please try again."
+                res.status(200).render("login", payload)
+            })
 
         if (user != null) {
             if (await bcrypt.compare(req.body.logPassword, user.password)) {

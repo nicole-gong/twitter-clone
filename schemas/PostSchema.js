@@ -3,7 +3,8 @@ const Schema = mongoose.Schema
 
 const PostSchema = new Schema({
     content: { type: String, trim: true },
-    postedBy:
+    postedBy: { type: Schema.Types.ObjectID },
+    pinned: Boolean
 }, {
     timestamps: true
 })

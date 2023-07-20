@@ -13,8 +13,13 @@ a {
     text-decoration: none
 }
 
-a:hover {
+a.child:hover {
     color: var(--darkPink);
+    background-color: var(--mediumPink);
+    border-radius: 30%;
+}
+
+.topIcon:hover {
     background-color: var(--mediumPink);
     border-radius: 30%;
 }
@@ -30,23 +35,37 @@ nav {
     background-color: var(--lightPink);
     display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: right;
     position: fixed;
     top: 0;
     left: 0;
     overflow-x: hidden;
     z-index: 1;
-    height: 100%
+    height: 100%;
+    text-align: center;
 }
 
-nav a {
+nav a{
     display: flex;
-    justify-content: center;
-    position: relative;
-    padding: var(--spacing);
+    flex-wrap: wrap;
+}
+
+nav i {
+    display:block;
+    margin-right:auto;
     font-size: 25px;
     width: 50px;
     height: 50px;
+    padding: 10px;
+}
+
+.iconText {
+    position: relative;
+    font-family: sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    align-items: flex-start;
+    padding: 10px;
 }
 
 nav a.pink {
@@ -81,7 +100,7 @@ nav a.pink {
     background-color: var(--lightPink);
     display: flex;
     padding: var(--spacing);
-    border-bottom: 10px solid var(--border);
+    border-bottom: 8px solid var(--border);
     flex-shrink: 0;
 }
 
@@ -128,4 +147,18 @@ nav a.pink {
     border-radius: 30%;
     padding: 7px 15px;
     font-weight: 600;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.mainContentContainer {
+    display: flex;
+    flex: 1;
 }
