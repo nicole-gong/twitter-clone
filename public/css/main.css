@@ -203,6 +203,17 @@ nav a.pink {
     flex-shrink: 0;
 }
 
+.largeFont .postHeader {
+    font-size: 18px
+}
+.largeFont .postBody, .largeFont .postFooter {
+    font-size: 23px;
+}
+.largeFont .postFooter .postButtonContainer button{
+    height: 40px;
+    width: 40px
+}
+
 .postActionContainer {
     color: var(--darkPink);
     padding-left: 0px;
@@ -228,8 +239,34 @@ nav a.pink {
     flex: 1
 }
 
-.displayName { font-weight: bold }
-.username { color: var(--border) }
+.postHeader { 
+    display: flex;
+    gap: .25em
+}
+.displayName { 
+    font-weight: bold;
+    align-self: center 
+}
+.username { 
+    color: var(--darkPink);
+    align-self: center;
+}
+.date {
+    color: var(--border);
+    flex: 1;
+    align-self: center;
+}
+.postHeader button {
+    background-color: transparent;
+    border: none;
+    color: var(--darkPink);
+    height: 30px;
+    width: 30px
+}
+.postHeader button:hover {
+    background-color: var(--lightPink);
+    border-radius: 50%
+}
 
 .postFooter {
     display: flex;
@@ -241,7 +278,6 @@ nav a.pink {
     justify-content: space-around;
     margin-top: 5px;
 }
-
 .postFooter .postButtonContainer button {
     color: var(--darkPink);
     display: flex;
@@ -252,8 +288,7 @@ nav a.pink {
     height: 30px;
     width: 30px;
 }
-.postFooter .postButtonContainer button.likeButton, 
-.postFooter .postButtonContainer button.repostButton {
+.postFooter .postButtonContainer button {
     color: var(--lightPink);
 }
 
@@ -267,10 +302,17 @@ nav a.pink {
     border-radius: 50%;
 }
 
-.postButtonContainer.red button.likeButton.active {
+.postButtonContainer button.active {
     color: var(--darkPink);
 }
 
-.postButtonContainer.green button.repostButton.active {
+
+.replyFlag {
+    color: var(--border);
+    margin-bottom: 5px;
+    font-weight:lighter
+}
+.replyFlag a {
     color: var(--darkPink);
+    font-weight: normal;
 }

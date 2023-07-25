@@ -19,15 +19,20 @@ $('#submitPostButton, #submitReplyButton').click(event => {
 
     if (isModal) {
         var id = button.data().id
-        console.log(id)
         data.replyTo = id
     }
 
     $.post("/api/posts", data, postData => {
-        var html = createPostHTML(postData)
-        $(".postsContainer").prepend(html)
-        textbox.val('')
-        button.prop("disabled", true)
+        if (postData.replyTo) {
+            textbox.val('')
+            location.reload()
+        }
+        else {
+            var html = createPostHTML(postData)
+            $(".postsContainer").prepend(html)
+            textbox.val('')
+            button.prop("disabled", true)
+        }
     })
 })
 
@@ -61,12 +66,22 @@ $(document).on("click", ".repostButton", event => {
         }
     })
 })
+$(document).on("click", ".post", event => {
+    var element = $(event.target)
+    var postID = getPostIDfromElement(element)
+
+    if (postID !== undefined && !element.is('button') && !element.is('i')) {
+        console.log(element)
+        window.location.href = '/posts/' + postID
+    }
+})
 $(document).on('show.bs.modal', '#replyModal', event => {
     var button = $(event.relatedTarget)
     var postID = getPostIDfromElement(button)
     $('#submitReplyButton').data('id', postID)
     $.get('/api/posts/' + postID, results => {
-        outputPosts(results, $('#originalPostContainer'))
+        console.log(results)
+        outputPosts(new Array(results.postData), $('#originalPostContainer'))
     })
 })
 $(document).on('hidden.bs.modal', '#replyModal', () => $('#originalPostContainer').html(''))
@@ -81,6 +96,23 @@ function outputPosts(results, container) {
     if (results.length == 0)
         container.append("<span>Nothing to show here.</span>")
 }
+function outputPostsWithReplies(results, container) {
+    container.html('')
+    if (results.postData.replyTo !== undefined && results.postData.replyTo._id !== undefined) {
+        var html = createPostHTML(results.postData.replyTo)
+        container.append(html)
+    }
+    var html = createPostHTML(results.postData, true)
+    container.append(html)
+
+    results.replies.forEach(result => {
+        html = createPostHTML(result)
+        container.append(html)
+    })
+
+    if (results.length == 0)
+        container.append("<span>Nothing to show here.</span>")
+}
 
 function getPostIDfromElement(element) {
     var rootElement = element.hasClass("post") == true ? element : element.closest(".post")
@@ -88,7 +120,7 @@ function getPostIDfromElement(element) {
     return postID
 }
 
-function createPostHTML(postData) {
+function createPostHTML(postData, largeFont = false) {
     var timestamp = timeDifference(new Date(), new Date(postData.createdAt))
 
     // if the post is repost, then change post data's to OP's content
@@ -98,6 +130,7 @@ function createPostHTML(postData) {
 
     var likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? "active" : ""
     var repostButtonActiveClass = postData.repostUsers.includes(userLoggedIn._id) ? "active" : ""
+    var largeFontClass = largeFont ? "largeFont" : ""
     var repostText = ""
     if (isRepost)
         repostText = 
@@ -105,22 +138,40 @@ function createPostHTML(postData) {
                 <i class='fa-solid fa-shrimp'></i>
                 Recreeted by <a href='/profile/${repostedBy}'>${userLoggedIn.firstName} ${userLoggedIn.lastName}</a>
             </span>`
+    
+    var replyFlag = ""
+    if (postData.replyTo && postData.replyTo._id) {
+        var replyToName = postData.replyTo.postedBy.username
+        replyFlag = 
+            `<div class='replyFlag'>
+                Replying to <a href='/profile/${replyToName}'>@${replyToName}</a>
+            </div>`
+    }
 
-    return `<div class='post' data-id='${postData._id}'>
+    var deleteButton = ""
+    if (postData.postedBy._id == userLoggedIn._id)
+        deleteButton =
+            `<button data-bs-toggle='modal' data-bs-target='#deletePostModal' data-id='${postData._id}'>
+                <i class='fa-solid fa-trash'></i>
+            </button>`
+    
+    return `<div class='post ${largeFontClass}' data-id='${postData._id}'>
                 <div class='mainContentContainer'>
                     <div class='postActionContainer'>
                         ${repostText}
                     </div>
                     <div class='userAndPostContainer'>    
                         <div class='userImageContainer'>
-                                <img src='${postData.postedBy.profilePic}'></img>
+                            <img src='${postData.postedBy.profilePic}'></img>
                         </div>
                         <div class='postContentContainer'>
                             <div class='postHeader'>
                                 <a href='/profile/${postData.postedBy.username}' class='displayName'>${postData.postedBy.firstName} ${postData.postedBy.lastName}</a>
                                 <span class='username'>@${postData.postedBy.username}</span>
-                                <span class='username'>${timestamp}</span>
+                                <span class='date'>${timestamp}</span>
+                                ${deleteButton}
                             </div>
+                            ${replyFlag}
                             <div class='postBody'>
                                 <span>${postData.content}</span>
                             </div>
@@ -132,14 +183,14 @@ function createPostHTML(postData) {
                                 <i class='fa-solid fa-comment'></i>
                             </button>
                         </div>
-                        <div class='postButtonContainer green'>
-                            <button class='repostButton ${repostButtonActiveClass}'>
+                        <div class='postButtonContainer'>
+                            <button class='${repostButtonActiveClass} repostButton'>
                                 <i class='fa-solid fa-shrimp'></i>
                                 <span>${postData.repostUsers.length || ""}</span>
                             </button>
                         </div>
-                        <div class='postButtonContainer red'>
-                            <button class='likeButton ${likeButtonActiveClass}'>
+                        <div class='postButtonContainer'>
+                            <button class='${likeButtonActiveClass} likeButton'>
                                 <i class='fa-solid fa-heart'></i>
                                 <span>${postData.likes.length || ""}</span>
                             </button>

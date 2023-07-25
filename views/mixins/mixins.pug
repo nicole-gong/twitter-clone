@@ -24,3 +24,21 @@ mixin createReplyModal(userLoggedIn)
                 .modal-footer
                     button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
                     button#submitReplyButton.btn.btn-primary(type='button', disabled="") Reply
+
+mixin createDeletePostModal()
+    #deletePostModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='deletePostModelLabel', aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5#deletePostModalLabel.modal-title Delete Creet?
+                    button.close(type='button', class='btn-close' data-bs-dismiss='modal', aria-label='Close')
+                .modal-body
+                    p You won't be able to delete this.
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+                    button#deletePostButton.btn.btn-primary(type='button') Delete
+
+
+mixin createPostModals(userLoggedIn)
+    +createReplyModal(userLoggedIn)
+    +createDeletePostModal()
