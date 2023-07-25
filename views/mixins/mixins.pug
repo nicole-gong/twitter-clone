@@ -6,3 +6,21 @@ mixin createPostForm(userLoggedIn)
             textArea#postTextArea(placeholder="Share a Creet")
             .buttonsContainer
                 button#submitPostButton(disabled="") Creet
+
+mixin createReplyModal(userLoggedIn)
+    #replyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='replyModelLabel', aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5#replyModalLabel.modal-title Reply
+                    button.close(type='button', class='btn-close' data-bs-dismiss='modal', aria-label='Close')
+                .modal-body
+                    #originalPostContainer
+                    .postFormContainer
+                        .userImageContainer
+                            img(src=userLoggedIn.profilePic, alt="User's profile picture")
+                        .textAreaContainer
+                            textArea#replyTextArea(placeholder="What's happening?")
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+                    button#submitReplyButton.btn.btn-primary(type='button', disabled="") Reply

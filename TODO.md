@@ -1,2 +1,5 @@
 - [ ] display a "solid" heart when a post is liked, and an "outline" heart otherwise.
 - [ ] horizontal scrollbar on small, medium screens
+- [X] sticky, detailed navbar
+- [ ] fix timestamps on retweeted posts
+- [ ] change comment button style
