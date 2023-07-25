@@ -3,21 +3,23 @@ const app = express()
 const bodyParser = require('body-parser')
 const Post = require('../../schemas/PostSchema')
 const User = require('../../schemas/UserSchema')
-const session = require('express-session')
 const router = express.Router()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-router.get("/", async (req, res, next) => {
-    res.status(200).send(await getPosts({}))
-})
+router.get("/", async (req, res, next) => res.status(200).send(await getPosts({})))
 
 router.get('/:id', async (req, res, next) => {
     var postID = req.params.id
-    var results = await getPosts({ _id: postID })
-    // for convenience with getPosts(), which uses find instead of findOne, we need to only grab the first (and only) instance of the array
+    var postData = await getPosts({ _id: postID })
+    postData = postData[0]
+    var results = {
+        postData: postData
+    }
 
-
+    if (postData.replyTo != undefined)
+        results.replyTo = postData.replyTo
+    results.replies = await getPosts({ replyTo: postID })
     res.status(200).send(results)
 })
 
@@ -78,7 +80,7 @@ router.post("/:id/repost", async (req, res, next) => {
     var ternary = deletedPost != null ? "$pull" : "$addToSet"
     var repost = deletedPost
     if (repost == null) 
-        repost = await Post.create({ postedBy: userID, repostData: postID })
+        repost = await Post.create({ postedBy: userID, repostData: postID, replyTo: postID })
             .catch(err => {
                 console.log(err)
                 res.sendStatus(400)
@@ -105,8 +107,8 @@ async function getPosts(filter) {
         .sort({ "createdAt": -1 })
         .catch(err => console.log(err))
 
-    var returnVal = await User.populate(results, { path: "repostData.postedBy" })
-    return returnVal
+    results = await User.populate(results, { path: "replyTo.postedBy" })
+    return await User.populate(results, { path: "repostData.postedBy" })
 }
 
 module.exports = router
