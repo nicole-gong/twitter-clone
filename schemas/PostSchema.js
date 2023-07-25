@@ -7,7 +7,8 @@ const PostSchema = new Schema({
     pinned: Boolean,
     likes: [{type: Schema.Types.ObjectID, ref: 'User'}],
     repostUsers: [{type: Schema.Types.ObjectID, ref: 'User'}],
-    repostData: {type: Schema.Types.ObjectID, ref: 'Post'}
+    repostData: { type: Schema.Types.ObjectID, ref: 'Post' },
+    replyTo: { type: Schema.Types.ObjectID, ref: 'Post' }
 }, {
     timestamps: true
 })

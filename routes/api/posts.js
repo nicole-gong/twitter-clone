@@ -8,20 +8,17 @@ const router = express.Router()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-router.get("/", (req, res, next) => {
-    // band-aid code for fixing "undefined" users
-    Post.find()
-        .populate("postedBy")
-        .populate("repostData")
-        .sort({ "createdAt": -1})
-        .then(async foundPost => {
-            foundPost = await User.populate(foundPost, { path: "repostData.postedBy"})
-            res.status(200).send(foundPost)
-        })
-        .catch(err => {
-            console.log(err)
-            res.sendStatus(400)
-        })
+router.get("/", async (req, res, next) => {
+    res.status(200).send(await getPosts({}))
+})
+
+router.get('/:id', async (req, res, next) => {
+    var postID = req.params.id
+    var results = await getPosts({ _id: postID })
+    // for convenience with getPosts(), which uses find instead of findOne, we need to only grab the first (and only) instance of the array
+
+
+    res.status(200).send(results)
 })
 
 router.post("/", (req, res, next) => {
@@ -32,6 +29,10 @@ router.post("/", (req, res, next) => {
         content: req.body.content,
         postedBy: req.session.user
     }
+
+    if (req.body.replyTo) 
+        postData.replyTo = req.body.replyTo
+
     Post.create(postData)
         .then(async newPost => {
             // this may not be necessary, but i'm too scared to work with populate some more
@@ -95,5 +96,17 @@ router.post("/:id/repost", async (req, res, next) => {
     
     res.status(200).send(post)
 })
-    
+
+async function getPosts(filter) {
+    var results = await Post.find(filter)
+        .populate("postedBy")
+        .populate("repostData")
+        .populate("replyTo")
+        .sort({ "createdAt": -1 })
+        .catch(err => console.log(err))
+
+    var returnVal = await User.populate(results, { path: "repostData.postedBy" })
+    return returnVal
+}
+
 module.exports = router

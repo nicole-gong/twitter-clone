@@ -1,20 +1,32 @@
-$('#postTextArea').on('keyup', event => {
-    var textbox = $(event.target).val().trim()
-    var submitButton = $('#submitPostButton')
-    if (textbox == "") {
+$('#postTextArea, #replyTextArea').on('keyup', event => {
+    var textbox = $(event.target)
+    var value = textbox.val().trim()
+    var isModal = textbox.parents('.modal').length == 1
+    var submitButton = isModal ? $('#submitReplyButton') : $('#submitPostButton')
+    if (value == "") {
         submitButton.prop('disabled', true)
         return
     }
     submitButton.prop('disabled', false)
 })
 
-$('#submitPostButton').click(event => {
+$('#submitPostButton, #submitReplyButton').click(event => {
     var button = $(event.target) 
-    var data = { content: $('#postTextArea').val() }
+
+    var isModal = button.parents('.modal').length == 1
+    var textbox = isModal ? $('#replyTextArea') : $('#postTextArea')
+    var data = { content: textbox.val() }
+
+    if (isModal) {
+        var id = button.data().id
+        console.log(id)
+        data.replyTo = id
+    }
+
     $.post("/api/posts", data, postData => {
         var html = createPostHTML(postData)
         $(".postsContainer").prepend(html)
-        $('#postTextArea').val('')
+        textbox.val('')
         button.prop("disabled", true)
     })
 })
@@ -49,6 +61,26 @@ $(document).on("click", ".repostButton", event => {
         }
     })
 })
+$(document).on('show.bs.modal', '#replyModal', event => {
+    var button = $(event.relatedTarget)
+    var postID = getPostIDfromElement(button)
+    $('#submitReplyButton').data('id', postID)
+    $.get('/api/posts/' + postID, results => {
+        outputPosts(results, $('#originalPostContainer'))
+    })
+})
+$(document).on('hidden.bs.modal', '#replyModal', () => $('#originalPostContainer').html(''))
+
+function outputPosts(results, container) {
+    container.html('')
+    results.forEach(result => {
+        var html = createPostHTML(result)
+        container.append(html)
+    })
+
+    if (results.length == 0)
+        container.append("<span>Nothing to show here.</span>")
+}
 
 function getPostIDfromElement(element) {
     var rootElement = element.hasClass("post") == true ? element : element.closest(".post")
@@ -96,7 +128,7 @@ function createPostHTML(postData) {
                     </div>
                     <div class='postFooter'>
                         <div class='postButtonContainer'>
-                            <button class='commentButton'>
+                            <button data-bs-toggle='modal' data-bs-target='#replyModal'>
                                 <i class='fa-solid fa-comment'></i>
                             </button>
                         </div>
