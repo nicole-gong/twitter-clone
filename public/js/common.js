@@ -158,7 +158,7 @@ function createPostHTML(postData, largeFont = false) {
         repostText = 
             `<span>
                 <i class='fa-solid fa-shrimp'></i>
-                Recreeted by <a href='/profile/${repostedBy}'>${userLoggedIn.firstName} ${userLoggedIn.lastName}</a>
+                Recreeted by <a href='/profile/${repostedBy}' class='toUnderline'>${userLoggedIn.firstName} ${userLoggedIn.lastName}</a>
             </span>`
     
     var replyFlag = ""
@@ -166,7 +166,7 @@ function createPostHTML(postData, largeFont = false) {
         var replyToName = postData.replyTo.postedBy.username
         replyFlag = 
             `<div class='replyFlag'>
-                Replying to <a href='/profile/${replyToName}'>@${replyToName}</a>
+                Replying to <a href='/profile/${replyToName}' class='toUnderline'>@${replyToName}</a>
             </div>`
     }
 
@@ -188,8 +188,10 @@ function createPostHTML(postData, largeFont = false) {
                         </div>
                         <div class='postContentContainer'>
                             <div class='postHeader'>
-                                <a href='/profile/${postData.postedBy.username}' class='displayName'>${postData.postedBy.firstName} ${postData.postedBy.lastName}</a>
-                                <span class='username'>@${postData.postedBy.username}</span>
+                                <span class='toUnderline'>
+                                    <a href='/profile/${postData.postedBy.username}' class='displayName'>${postData.postedBy.firstName} ${postData.postedBy.lastName}</a>
+                                    <a href='/profile/${postData.postedBy.username}' class='username'>@${postData.postedBy.username}</a>
+                                </span>
                                 <span class='date'>${timestamp}</span>
                                 ${deleteButton}
                             </div>

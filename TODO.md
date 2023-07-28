@@ -3,5 +3,6 @@
 - [X] sticky, detailed navbar
 - [ ] fix timestamps on retweeted posts
 - [ ] change comment button style
-- [ ] reposting a reply breaks everything
 - [ ] howto recursively populate a schema... replies are hard-coded to only load the top and bottom reply currently.
+- [X] deleting a post with reposts will destroy the 
+- [ ] multiple reposts with different users display only the current user who reposted
