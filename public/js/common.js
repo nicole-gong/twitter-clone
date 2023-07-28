@@ -79,12 +79,34 @@ $(document).on('show.bs.modal', '#replyModal', event => {
     var button = $(event.relatedTarget)
     var postID = getPostIDfromElement(button)
     $('#submitReplyButton').data('id', postID)
-    $.get('/api/posts/' + postID, results => {
-        console.log(results)
+    $.get('/api/posts/' + postID, results => 
         outputPosts(new Array(results.postData), $('#originalPostContainer'))
-    })
+    )
 })
 $(document).on('hidden.bs.modal', '#replyModal', () => $('#originalPostContainer').html(''))
+
+$(document).on('show.bs.modal', '#deletePostModal', event => {
+    var button = $(event.relatedTarget)
+    var postID = getPostIDfromElement(button)
+    $('#deletePostButton').data('postID', postID)
+})
+// This can be handled directly instead of on document load like the rest of them because it's 
+// inside a modal, which means it'll guarantee to have loaded
+$('#deletePostButton').click(event => {
+    var postID = $(event.target).data('postID')
+    console.log(postID)
+    $.ajax({
+        url: `/api/posts/${postID}`,
+        method: "DELETE",
+        success: (data, status, xhr) => {
+            if (xhr.status != 202) {
+                alert("Could not delete post. Please try again later.")
+                return
+            }
+            location.reload()
+        }
+    })
+})
 
 function outputPosts(results, container) {
     container.html('')
