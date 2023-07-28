@@ -8,6 +8,29 @@ const router = express.Router()
 app.use(bodyParser.urlencoded({ extended: false }))
 
 router.get("/", async (req, res, next) => res.status(200).send(await getPosts({})))
+router.post("/", (req, res, next) => {
+    if (!req.body.content)
+        res.sendStatus(400)
+
+    var postData = {
+        content: req.body.content,
+        postedBy: req.session.user
+    }
+
+    if (req.body.replyTo)
+        postData.replyTo = req.body.replyTo
+
+    Post.create(postData)
+        .then(async newPost => {
+            // this may not be necessary, but i'm too scared to work with populate some more
+            newPost = await User.populate(newPost, { path: "postedBy" })
+            res.status(201).send(newPost)
+        })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        })
+})
 
 router.get('/:id', async (req, res, next) => {
     var postID = req.params.id
@@ -22,25 +45,10 @@ router.get('/:id', async (req, res, next) => {
     results.replies = await getPosts({ replyTo: postID })
     res.status(200).send(results)
 })
-
-router.post("/", (req, res, next) => {
-    if (!req.body.content) 
-        res.sendStatus(400)
-    
-    var postData = {
-        content: req.body.content,
-        postedBy: req.session.user
-    }
-
-    if (req.body.replyTo) 
-        postData.replyTo = req.body.replyTo
-
-    Post.create(postData)
-        .then(async newPost => {
-            // this may not be necessary, but i'm too scared to work with populate some more
-            newPost = await User.populate(newPost, { path: "postedBy"})
-            res.status(201).send(newPost)
-        })
+router.delete('/:id', (req, res, next) => {
+    Post.findByIdAndDelete(req.params.id)
+        // 202 is delete status
+        .then(() => res.sendStatus(202))
         .catch(err => {
             console.log(err)
             res.sendStatus(400)
@@ -68,7 +76,6 @@ router.put("/:id/like", async (req, res, next) => {
     
     res.status(200).send(post)
 })
-
 router.post("/:id/repost", async (req, res, next) => {
     var postID = req.params.id
     var userID = req.session.user._id
