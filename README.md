@@ -7,13 +7,13 @@ This is a website called Critter. It can do the basic functionalities of Twitter
 * [Bugs](#bugs)
 
 ## Installation
-This project was created with npm. It includes package-lock.json and package.json for your reference.
+This project was created with npm. 
 
 ## Version Changes
 ### July 20 2023 v0.1
 Barebones of the project. Creating logins and saving accounts. Text posting. Reposts and likes.
+### July 28 2023 v0.2
+Replying to posts, and deleting posts.
 
 ## Bugs
-* Reposting a reply breaks everything. Nested schemae in Mongoose are hard to work with.
-* Timestamps on reposted posts reflect the time of reposting, not the time of the original post.
-* Miniscule horizontal scrollbar on all screen display sizes
+* Check TODO.md, as the project is very under construction right now. This section will be formally updated upon release
