@@ -75,6 +75,35 @@ $(document).on("click", ".post", event => {
         window.location.href = '/posts/' + postID
     }
 })
+$(document).on('click', '.followButton', event => {
+    var button = $(event.target)
+    var userID = button.data().user
+    console.log(userID)
+    $.ajax({
+        url: `/api/users/${userID}/follow`,
+        method: "PUT",
+        success: (userData, status, xhr) => {
+            if (xhr.status == 404) return
+            var difference = 1
+            if (userData.following && userData.following.includes(userID)) {
+                button.addClass('following')
+                button.text('Following')
+            }
+            else {
+                button.removeClass('following')
+                button.text('Follow')
+                difference = -1
+            }
+
+            var followersLabel = $('#followersValue') 
+            if (followersLabel.length != 0) {
+                var followersText = parseInt(followersLabel.text())
+                followersLabel.text(followersText + difference)
+            }
+        }
+    })
+})
+
 $(document).on('show.bs.modal', '#replyModal', event => {
     var button = $(event.relatedTarget)
     var postID = getPostIDfromElement(button)
@@ -116,7 +145,7 @@ function outputPosts(results, container) {
     })
 
     if (results.length == 0)
-        container.append("<span>Nothing to show here.</span>")
+        container.append("<span class=emptyPost>Nothing to show here.</span>")
 }
 function outputPostsWithReplies(results, container) {
     container.html('')

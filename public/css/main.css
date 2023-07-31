@@ -8,6 +8,10 @@
     --text: #171717;
     --spacing: 15px
 }
+.row {
+    margin-right: 0px;
+}
+
 button:disabled {
     color: #eae8e8;
     background-color: var(--darkPink);
@@ -37,23 +41,21 @@ h1 {
 
 nav {
     background-color: var(--lightPink);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     align-items: right;
     position: fixed;
-    top: 0;
-    left: 0;
     overflow-x: hidden;
+    left: 0;
     z-index: 1;
     height: 100%;
     text-align: center;
 }
-
 nav a{
     display: flex;
     flex-wrap: wrap;
 }
-
 nav i {
     display:block;
     margin-right:auto;
@@ -103,7 +105,7 @@ nav a.pink {
     background-color: var(--lightPink);
     display: flex;
     padding: var(--spacing);
-    border-bottom: 8px solid var(--border);
+    border-bottom: 8px solid var(--darkerPink);
     flex-shrink: 0;
 }
 
@@ -319,9 +321,11 @@ nav a.pink {
     font-weight: normal;
 }
 
-.errorMessage {
+.emptyPost {
     padding: var(--spacing);
-    border-bottom: 1px solid var(--border);
+    font-weight: bold;
+    background: var(--mediumPink);
+    display: flex
 }
 .coverPhotoContainer {
     height: 180px;
@@ -357,7 +361,6 @@ nav a.pink {
     margin-left: var(--spacing);
 }
 .profileButton:hover, .followButton:hover {
-    border: 1px solid var(--darkPink);
     color: var(--darkPink);
     background-color: var(--lighterPink);
 }
@@ -366,8 +369,7 @@ nav a.pink {
     background-color: var(--darkerPink);
 }
 .followButton.following:hover {
-    background-color: var(--mediumPink);
-    border: 1px solid var(--mediumPink);
+    background-color: var(--lightPink);
 }
 .profileHeaderContainer .userDetailsContainer {
     display:flex;
@@ -411,4 +413,25 @@ nav a.pink {
 .tab:hover {
     color: var(--darkPink);
     background-color: var(--lighterPink);
+}
+
+.resultsContainer {
+    display: flex;
+    flex-direction: column;
+}
+.resultsContainer .user {
+    padding: var(--spacing);
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+.user .userDetailsContainer {
+    display: flex;
+    padding: 0 var(--spacing);
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+}
+.userDetailsContainer .header {
+    display: flex;
+    flex-direction: column;
 }

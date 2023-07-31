@@ -1,9 +1,9 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const router = express.Router()
 const Post = require('../../schemas/PostSchema')
 const User = require('../../schemas/UserSchema')
-const router = express.Router()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
