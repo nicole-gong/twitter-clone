@@ -1,13 +1,21 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const router = express.Router()
 const Post = require('../../schemas/PostSchema')
 const User = require('../../schemas/UserSchema')
-const router = express.Router()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-router.get("/", async (req, res, next) => res.status(200).send(await getPosts({})))
+router.get("/", async (req, res, next) => {
+    var searchObj = req.query
+    if (searchObj.isReply !== undefined) {
+        var isReply = searchObj.isReply == 'true'
+        searchObj.replyTo = { $exists: isReply }
+        delete searchObj.isReply
+    }
+    res.status(200).send(await getPosts(searchObj))
+})
 router.post("/", (req, res, next) => {
     if (!req.body.content)
         res.sendStatus(400)
@@ -45,8 +53,13 @@ router.get('/:id', async (req, res, next) => {
     results.replies = await getPosts({ replyTo: postID })
     res.status(200).send(results)
 })
-router.delete('/:id', (req, res, next) => {
-    Post.findByIdAndDelete(req.params.id)
+router.delete('/:id', async (req, res, next) => {
+    // Delete all reposts first
+    post = await Post.findById(req.params.id)
+    post.repostPosts.forEach(async repost => await Post.findByIdAndDelete(repost))
+
+    // Now delete the main post
+    Post.findByIdAndDelete(post)
         // 202 is delete status
         .then(() => res.sendStatus(202))
         .catch(err => {
@@ -86,7 +99,7 @@ router.post("/:id/repost", async (req, res, next) => {
         })
     var ternary = deletedPost != null ? "$pull" : "$addToSet"
     var repost = deletedPost
-    if (repost == null) 
+    if (deletedPost == null) 
         repost = await Post.create({ postedBy: userID, repostData: postID, replyTo: postID })
             .catch(err => {
                 console.log(err)
@@ -102,6 +115,10 @@ router.post("/:id/repost", async (req, res, next) => {
             console.log(err)
             res.sendStatus(400)
         })
+    
+    // Adds to "repostPosts" in schema, which tracks all the reposting postIDs 
+    if (deletedPost == null) 
+        var originalPost = await Post.findByIdAndUpdate(postID, { $addToSet: { repostPosts: repost.id } }, { new: true })
     
     res.status(200).send(post)
 })

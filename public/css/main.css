@@ -1,5 +1,6 @@
 :root {
-    --darkPink: #632435;
+    --darkerPink: #632435;
+    --darkPink: #bb6075;
     --mediumPink: #d27e92;
     --lightPink: #e7aabc;
     --lighterPink: #eed4da;
@@ -7,21 +8,28 @@
     --text: #171717;
     --spacing: 15px
 }
+.row {
+    margin-right: 0px;
+}
 
+button:disabled {
+    color: #eae8e8;
+    background-color: var(--darkPink);
+}
 a {
     color: var(--text);
     text-decoration: none
 }
 
 a.child:hover {
-    color: var(--darkPink);
+    color: var(--darkerPink);
     background-color: var(--mediumPink);
-    border-radius: 30%;
+    border-radius: 30px;
 }
 
 .topIcon:hover {
     background-color: var(--mediumPink);
-    border-radius: 30%;
+    border-radius: 30px;
 }
 
 h1 {
@@ -33,23 +41,21 @@ h1 {
 
 nav {
     background-color: var(--lightPink);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     align-items: right;
     position: fixed;
-    top: 0;
-    left: 0;
     overflow-x: hidden;
+    left: 0;
     z-index: 1;
     height: 100%;
     text-align: center;
 }
-
 nav a{
     display: flex;
     flex-wrap: wrap;
 }
-
 nav i {
     display:block;
     margin-right:auto;
@@ -69,7 +75,7 @@ nav i {
 }
 
 nav a.pink {
-    color: var(--darkPink)
+    color: var(--darkerPink)
 }
 
 .mainSectionContainer {
@@ -99,7 +105,7 @@ nav a.pink {
     background-color: var(--lightPink);
     display: flex;
     padding: var(--spacing);
-    border-bottom: 8px solid var(--border);
+    border-bottom: 8px solid var(--darkerPink);
     flex-shrink: 0;
 }
 
@@ -107,7 +113,8 @@ nav a.pink {
     background-color: var(--lightPink);
 }
 .modal-content .modal-title {
-    font-weight: bold;
+    font-weight: 800;
+    font-size: 25px
 }
 .modal-content .modal-header {
     border-bottom: 1px solid var(--border);
@@ -135,18 +142,15 @@ nav a.pink {
     font-weight: bold;
     background-color: var(--lightPink);
     border: none;
-    border-radius: 30%
+    border-radius: 30px
 }
 .modal button:hover {
     background-color: var(--border);
     border: none;
-    border-radius: 30%
+    border-radius: 30px
 }
 .modal button#submitReplyButton {
-    background-color: var(--darkPink);
-}
-.modal button#submitReplyButton:disabled {
-    background-color: var(--border);
+    background-color: var(--darkerPink);
 }
 
 .userImageContainer {
@@ -170,28 +174,22 @@ nav a.pink {
     background-color: var(--lightPink);
     width: 100%;
     border: none;
-    border-radius: 5%;
     resize: none;
     font-size: 18px;
-    outline: var(--darkPink)
+    outline: var(--border)
 }
 
 #submitPostButton {
-    background-color: var(--darkPink);
+    background-color: var(--darkerPink);
     color: white;
     border: none;
-    border-radius: 30%;
+    border-radius: 30px;
     padding: 7px 15px;
     font-weight: bold;
 }
-
 #submitPostButton:disabled {
-    background-color: var(--mediumPink);
     color: #eae8e8;
-    border: none;
-    border-radius: 30%;
-    padding: 7px 15px;
-    font-weight: bold;
+    background-color: var(--darkPink);
 }
 
 .post {
@@ -203,6 +201,9 @@ nav a.pink {
     flex-shrink: 0;
 }
 
+.largeFont {
+    background-color: var(--darkPink);
+}
 .largeFont .postHeader {
     font-size: 18px
 }
@@ -215,11 +216,12 @@ nav a.pink {
 }
 
 .postActionContainer {
-    color: var(--darkPink);
+    color: var(--darkerPink);
     padding-left: 0px;
-    font-size: 12px;
+    font-size: 14px;
     margin-bottom: 5px;
     margin-top: -8px;
+    font-weight: bolder;
 }
 
 .mainContentContainer {
@@ -241,31 +243,32 @@ nav a.pink {
 
 .postHeader { 
     display: flex;
+    align-items: center;
     gap: .25em
+}
+.toUnderline:hover {
+    text-decoration: underline;
 }
 .displayName { 
     font-weight: bold;
-    align-self: center 
 }
 .username { 
-    color: var(--darkPink);
-    align-self: center;
+    color: var(--darkerPink);
 }
 .date {
     color: var(--border);
     flex: 1;
-    align-self: center;
 }
 .postHeader button {
     background-color: transparent;
     border: none;
-    color: var(--darkPink);
+    color: var(--darkerPink);
     height: 30px;
     width: 30px
 }
 .postHeader button:hover {
     background-color: var(--lightPink);
-    border-radius: 50%
+    border-radius: 50px
 }
 
 .postFooter {
@@ -279,7 +282,7 @@ nav a.pink {
     margin-top: 5px;
 }
 .postFooter .postButtonContainer button {
-    color: var(--darkPink);
+    color: var(--darkerPink);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -299,20 +302,136 @@ nav a.pink {
 .postFooter .postButtonContainer button:hover {
     background-color: var(--lighterPink);
     color: var(--mediumPink);
-    border-radius: 50%;
+    border-radius: 50px;
 }
 
 .postButtonContainer button.active {
-    color: var(--darkPink);
+    color: var(--darkerPink);
 }
 
 
 .replyFlag {
-    color: var(--border);
+    color: var(--darkerPink);
     margin-bottom: 5px;
-    font-weight:lighter
+    font-weight: bolder;
+    font-size: 14px;
 }
 .replyFlag a {
-    color: var(--darkPink);
+    color: var(--darkerPink);
     font-weight: normal;
+}
+
+.emptyPost {
+    padding: var(--spacing);
+    font-weight: bold;
+    background: var(--mediumPink);
+    display: flex
+}
+.coverPhotoContainer {
+    height: 180px;
+    background-color: var(--darkPink);
+    position: relative
+}
+.profileHeaderContainer {
+    background: var(--lightPink);
+}
+.profileHeaderContainer .userImageContainer {
+    height: 132px;
+    width: 132px;
+    margin-left: var(--spacing);
+    position: absolute;
+    bottom: -66px
+}
+.profileHeaderContainer .userImageContainer img {
+    border: 4px solid var(--lightPink);
+}
+.profileHeaderContainer .profileButtonsContainer {
+    text-align: right;
+    padding: var(--spacing);
+    min-height: 66px
+}
+.profileButton, .followButton {
+    border: 1px solid var(--darkerPink);
+    background-color: var(--lightPink);
+    color: var(--darkerPink);
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-left: var(--spacing);
+}
+.profileButton:hover, .followButton:hover {
+    color: var(--darkPink);
+    background-color: var(--lighterPink);
+}
+.followButton.following {
+    color: white;
+    background-color: var(--darkerPink);
+}
+.followButton.following:hover {
+    background-color: var(--lightPink);
+}
+.profileHeaderContainer .userDetailsContainer {
+    display:flex;
+    flex-direction: column;
+    padding: 0 var(--spacing)
+}
+.followersContainer .value {
+    font-weight: bold;
+    margin-right: .25em;
+}
+.followersContainer span:not(.value) {
+    color: var(--border)
+}
+.followersContainer a {
+    margin-right: .5em;
+}
+.followersContainer a:hover {
+    border-bottom: 1px solid var(--border);
+}
+.tabsContainer {
+    background-color: var(--lightPink);
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.tab {
+    margin-top: var(--spacing);
+    flex: 1;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--border);
+    font-weight: bold;
+}
+.tab.active {
+    color: var(--darkerPink);
+    border-bottom: 2px solid var(--darkerPink)
+}
+.tab:hover {
+    color: var(--darkPink);
+    background-color: var(--lighterPink);
+}
+
+.resultsContainer {
+    display: flex;
+    flex-direction: column;
+}
+.resultsContainer .user {
+    padding: var(--spacing);
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+.user .userDetailsContainer {
+    display: flex;
+    padding: 0 var(--spacing);
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+}
+.userDetailsContainer .header {
+    display: flex;
+    flex-direction: column;
 }
