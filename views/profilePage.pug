@@ -11,9 +11,19 @@ block content
         - followingCount = profileUser.following.length
 
         .profileHeaderContainer 
-            .coverPhotoContainer
+            .photoSection
+                .coverPhotoContainer
+                    if profileUser.coverPhoto
+                        img(src=profileUser.coverPhoto, alt="User's cover photo")
+                    if profileUser._id == userLoggedIn._id
+                        button.coverPhotoButton(data-bs-toggle='modal', data-bs-target='#coverPhotoUploadModal')
+                            i.fas.fa-camera
+
                 .userImageContainer 
                     img(src=profileUser.profilePic, alt="User's profile picture")
+                    if profileUser._id == userLoggedIn._id
+                        button.profilePictureButton(data-bs-toggle='modal', data-bs-target='#imageUploadModal')
+                            i.fas.fa-camera
             .profileButtonsContainer
                 if profileUser._id != userLoggedIn._id
                     a.profileButton(href=`/messages/${profileUser._id}`)

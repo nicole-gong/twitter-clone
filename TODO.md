@@ -1,6 +1,8 @@
-# Major Revamps
+# Major Goals
 - [ ] in the home page, add separate "for you" and "following" tabs
     - gives user option to only view posts from those they follow 
+- [ ] group chat smile
+- [ ] notifications smile
 
 # Site Bugs
 - [X] deleting a post with reposts will destroy the site
@@ -13,6 +15,7 @@
     - replies are hard-coded to only load the top and bottom reply currently
     - because schema population is done manually per-case rn 
 - [ ] reposts display only the logged-in user as the one who reposted 
+- [ ] make deleted posts still show replies
 
 # Visual Bugs
 - [ ] get rid of horizontal scrollbar on screens
@@ -23,8 +26,10 @@
     - [ ] show original post's time, not time of retweet
     - [ ] better display on medium / small screens
 - [ ] change comment button style to be white with no replies, pink with replies
+- [ ] proper mobile implementation- rather than just optimized for screen size
 
 # Code Maintenance
 - [ ] refactor the .catch() code to take up less space per instance 
     - give more informative console information
 - [ ] make sure all async functions have exception handling
+- [ ] refactor image upload / cropping code
