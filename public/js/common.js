@@ -1,3 +1,6 @@
+// globals
+var cropper;
+
 $('#postTextArea, #replyTextArea').on('keyup', event => {
     var textbox = $(event.target)
     var value = textbox.val().trim()
@@ -134,6 +137,90 @@ $('#deletePostButton').click(event => {
             }
             location.reload()
         }
+    })
+})
+
+// picture cropping
+$('#filePhoto').change(function() {
+    if (this.files && this.files[0]) {
+        var reader = new FileReader()
+        reader.onload = event => {
+            var image = document.getElementById('imagePreview')
+            image.src = event.target.result
+            if (cropper !== undefined) 
+                cropper.destroy()
+
+            cropper = new Cropper(image, {
+                aspectRatio: 1 / 1,
+                background: false,
+                viewmode: 2,
+                autoCropArea: 1
+            })
+        }
+        reader.readAsDataURL(this.files[0])
+    }
+})
+$('#coverPhoto').change(function() {
+    if (this.files && this.files[0]) {
+        var reader = new FileReader()
+        reader.onload = event => {
+            var image = document.getElementById('coverPreview')
+            image.src = event.target.result
+            if (cropper !== undefined) 
+                cropper.destroy()
+
+            cropper = new Cropper(image, {
+                aspectRatio: 3 / 1,
+                background: false,
+                viewmode: 2,
+                autoCropArea: 1
+            })
+        }
+        reader.readAsDataURL(this.files[0])
+    }
+})
+$('#imageUploadButton').click(() => {
+    var canvas = cropper.getCroppedCanvas()
+    if (canvas == null) {
+        alert("Could not upload image. Please try a different file format.")
+        return
+    }
+    
+    canvas.toBlob(blob => {
+        var formData = new FormData()
+        formData.append('croppedImage', blob)
+        $.ajax({
+            url: '/api/users/profilePicture',
+            type: 'POST',
+            data: formData,
+            // prevents jquery from converting data to string
+            processData: false,
+            // for image uploads (jquery adds its own boundary string otherwise)
+            contentType: false,
+            success: () => location.reload()
+        })
+    })
+})
+$('#coverPhotoButton').click(() => {
+    var canvas = cropper.getCroppedCanvas()
+    if (canvas == null) {
+        alert("Could not upload image. Please try a different file format.")
+        return
+    }
+    
+    canvas.toBlob(blob => {
+        var formData = new FormData()
+        formData.append('croppedImage', blob)
+        $.ajax({
+            url: '/api/users/coverPhoto',
+            type: 'POST',
+            data: formData,
+            // prevents jquery from converting data to string
+            processData: false,
+            // for image uploads (jquery adds its own boundary string otherwise)
+            contentType: false,
+            success: () => location.reload()
+        })
     })
 })
 
